@@ -1,3 +1,4 @@
+![Logo](assets/images/logo.png)
 # Prompt2Plan
 
 Minimal app that turns an AI prompt into a calendar event.
@@ -20,7 +21,7 @@ Minimal app that turns an AI prompt into a calendar event.
 2. Create a Google Cloud project and OAuth client IDs (Web and iOS).
 3. Add the following env vars (Expo reads EXPO_PUBLIC_* on the client):
 
-````.env
+````dotenv
 EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID=your_web_client_id.apps.googleusercontent.com
 EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID=your_ios_client_id.apps.googleusercontent.com
 ````
