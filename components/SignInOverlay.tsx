@@ -1,12 +1,15 @@
 import { Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import GoogleSigninUI from './GoogleSigninUI';
+import { GoogleSigninButton } from '@react-native-google-signin/google-signin';
+import { useAuth } from '@/hooks/use-auth';
 
 interface SignInOverlayProps {
   visible: boolean;
   onContinueAsGuest: () => void;
+  onSignIn: () => void;
+  isLoading: boolean;
 }
 
-export default function SignInOverlay({ visible, onContinueAsGuest }: SignInOverlayProps) {
+export default function SignInOverlay({ visible, onContinueAsGuest, onSignIn, isLoading }: SignInOverlayProps) {
   return (
     <Modal
       visible={visible}
@@ -24,7 +27,12 @@ export default function SignInOverlay({ visible, onContinueAsGuest }: SignInOver
           <Text style={styles.subtitle}>Sign in to connect your Google Calendar</Text>
           
           <View style={styles.signInContainer}>
-            <GoogleSigninUI />
+            <GoogleSigninButton
+                  size={GoogleSigninButton.Size.Wide}
+                  color={GoogleSigninButton.Color.Light}
+                  onPress={onSignIn}
+                  disabled={isLoading}
+                />
           </View>
         </View>
         
@@ -49,7 +57,9 @@ const styles = StyleSheet.create({
   },
   logo: {
     width: 400,
-    height: 400,
+    height: 100,
+    marginTop: 100,
+    marginBottom: 100
   },
   content: {
     alignItems: 'center',
@@ -74,6 +84,7 @@ const styles = StyleSheet.create({
   guestButton: {
     position: 'absolute',
     bottom: 40,
+    marginBottom: 10
   },
   guestButtonText: {
     fontSize: 16,

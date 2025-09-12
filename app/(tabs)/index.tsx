@@ -1,53 +1,33 @@
 import SignInOverlay from '@/components/SignInOverlay';
-import { GoogleSignin, User } from '@react-native-google-signin/google-signin';
-import { useEffect, useState } from 'react';
+import { useAuth } from '@/hooks/use-auth';
 import { Button, StyleSheet, Text, View } from 'react-native';
 
 export default function HomeScreen() {
-  const [user, setUser] = useState<User | null>(null);
-  const [showSignInOverlay, setShowSignInOverlay] = useState(false);
-  const [isGuest, setIsGuest] = useState(false);
+  const { user, isLoading, isGuest, signOutUser, continueAsGuest, signInUser } = useAuth();
 
-  useEffect(() => {
-    signInUser();
-  }, []);
-
-  const signInUser = async () => {
-    await GoogleSignin.hasPlayServices();
-    await GoogleSignin.signInSilently();
-    const user = await GoogleSignin.getCurrentUser();
-    
-    if (user == null) {
-      console.log("No user logged in.");
-      setShowSignInOverlay(true);
-    } else {
-      console.log("Logged in user: ", user.user.email);
-      setUser(user);
-      setShowSignInOverlay(false);
-    }
-  };
-
-  const signOutUser = async () => {
-    GoogleSignin.signOut()
+  if (isLoading) {
+    return (
+      <View style={styles.container}>
+        <Text>Loading...</Text>
+      </View>
+    );
   }
-
-  const handleContinueAsGuest = () => {
-    setIsGuest(true);
-    setShowSignInOverlay(false);
-  };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Hello {user ? user.user.givenName : ""}!</Text>    
+      <Text style={styles.text}>Hello {user ? user.user.givenName : isGuest ? "Guest" : ""}!</Text>    
       <SignInOverlay 
-        visible={showSignInOverlay}
-        onContinueAsGuest={handleContinueAsGuest}
+        visible={!user && !isGuest}
+        onContinueAsGuest={continueAsGuest}
+        onSignIn={signInUser}
+        isLoading={isLoading}
       />
-      <Button
-        onPress={signOutUser}
-        title="Sign out"
-      >
-      </Button>
+      {user && (
+        <Button
+          onPress={signOutUser}
+          title="Sign out"
+        />
+      )}
     </View>
   );
 }
