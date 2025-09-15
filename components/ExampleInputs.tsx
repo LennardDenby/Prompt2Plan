@@ -1,0 +1,109 @@
+import PromptInput from '@/components/PromptInput';
+import React, { useState } from 'react';
+import { FlatList, Pressable, StyleSheet, Text, View, useColorScheme } from 'react-native';
+
+type Suggestion = { title: string; subtitle: string };
+type Props = {
+  onSubmit: (text: string) => void;
+  suggestions?: Suggestion[];
+  placeholder?: string;
+};
+
+const DEFAULT_SUGGESTIONS: Suggestion[] = [
+  { title: 'Todo', subtitle: 'Todo' },
+  { title: 'Todo', subtitle: 'Todo' },
+  { title: 'Todo', subtitle: 'Todo' },
+  { title: 'Todo', subtitle: 'Todo' },
+  { title: 'Todo', subtitle: 'Todo' },
+];
+
+export default function ExampleInputs({
+  onSubmit,
+  suggestions = DEFAULT_SUGGESTIONS,
+  placeholder = 'Create an event...',
+}: Props) {
+  const isDark = useColorScheme() === 'dark';
+  const [value, setValue] = useState('');
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.suggestionsRow}>
+        <FlatList
+          data={suggestions}
+          keyExtractor={(item, i) => item.title + i}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.suggestionsContent}
+          renderItem={({ item }) => (
+            <Pressable
+              style={({ pressed }) => [
+                styles.suggestionCard,
+                isDark ? styles.cardDark : styles.cardLight,
+                pressed && { opacity: 0.9, transform: [{ scale: 0.98 }] },
+              ]}
+              onPress={() => setValue(`${item.title} ${item.subtitle}`)}
+            >
+              <Text style={[styles.suggestionTitle, isDark && { color: '#E5E7EB' }]}>{item.title}</Text>
+              <Text style={[styles.suggestionSubtitle, isDark && { color: '#9CA3AF' }]}>
+                {item.subtitle}
+              </Text>
+            </Pressable>
+          )}
+        />
+      </View>
+      <PromptInput
+        value={value}
+        onChangeText={setValue}
+        onSubmit={(t) => {
+          onSubmit(t);
+          setValue('');
+        }}
+        placeholder={placeholder}
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+  },
+  suggestionsRow: {
+    marginBottom: 8,
+  },
+  suggestionsContent: {
+    paddingLeft: 4,
+    marginLeft: 12
+  },
+  suggestionCard: {
+    borderRadius: 18,
+    marginRight: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    minWidth: 220,
+    maxWidth: 280,
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.06,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 2,
+    borderWidth: StyleSheet.hairlineWidth,
+  },
+  cardLight: {
+    backgroundColor: '#fff',
+    borderColor: '#EBEDF0',
+  },
+  cardDark: {
+    backgroundColor: '#1F1F23',
+    borderColor: '#2A2A2F',
+  },
+  suggestionTitle: {
+    fontWeight: '700',
+    color: '#11181C',
+    marginBottom: 2,
+  },
+  suggestionSubtitle: {
+    color: '#6B7280',
+  },
+});
