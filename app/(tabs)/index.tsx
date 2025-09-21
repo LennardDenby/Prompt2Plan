@@ -1,3 +1,4 @@
+import CalendarEventModal, { CalendarEventFormValues } from '@/components/CalendarEventModal';
 import ExampleInputs from '@/components/ExampleInputs';
 import PromptInput from '@/components/PromptInput';
 import SignInOverlay from '@/components/SignInOverlay';
@@ -20,6 +21,9 @@ export default function HomeScreen() {
 
   const [userInput, setUserInput] = useState('');
   const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const [showEventModal, setShowEventModal] = useState(false);
+  const [draftEventTitle, setDraftEventTitle] = useState<string | undefined>(undefined);
+  const [lastSavedEvent, setLastSavedEvent] = useState<CalendarEventFormValues | null>(null);
   
   useEffect(() => {
   const showSub = Platform.OS === 'ios'
@@ -38,6 +42,9 @@ export default function HomeScreen() {
     setUserInput('');
     Keyboard.dismiss();
     console.log('Submit prompt:', text);
+    // Show the calendar event modal with the prompt as default title
+    setDraftEventTitle(text);
+    setShowEventModal(true);
   };
 
   if (isLoading) {
@@ -79,6 +86,16 @@ export default function HomeScreen() {
           }}
         />
       </KeyboardAvoidingView>
+      <CalendarEventModal
+        visible={showEventModal}
+        defaultTitle={draftEventTitle}
+        calendarAccountEmail={user?.user.email}
+        onClose={() => setShowEventModal(false)}
+        onSave={(values) => {
+          setLastSavedEvent(values);
+          console.log('Saved event:', values);
+        }}
+      />
     </View>
   );
 }             
