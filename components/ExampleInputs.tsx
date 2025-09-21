@@ -4,9 +4,8 @@ import { FlatList, Pressable, StyleSheet, Text, View, useColorScheme } from 'rea
 
 type Suggestion = { title: string; subtitle: string };
 type Props = {
-  onSubmit: (text: string) => void;
+  setUserInput: (text: string) => void;
   suggestions?: Suggestion[];
-  placeholder?: string;
 };
 
 const DEFAULT_SUGGESTIONS: Suggestion[] = [
@@ -18,12 +17,10 @@ const DEFAULT_SUGGESTIONS: Suggestion[] = [
 ];
 
 export default function ExampleInputs({
-  onSubmit,
   suggestions = DEFAULT_SUGGESTIONS,
-  placeholder = 'Create an event...',
+  setUserInput
 }: Props) {
   const isDark = useColorScheme() === 'dark';
-  const [value, setValue] = useState('');
 
   return (
     <View style={styles.container}>
@@ -41,7 +38,7 @@ export default function ExampleInputs({
                 isDark ? styles.cardDark : styles.cardLight,
                 pressed && { opacity: 0.9, transform: [{ scale: 0.98 }] },
               ]}
-              onPress={() => setValue(`${item.title} ${item.subtitle}`)}
+              onPress={() => setUserInput(item.subtitle)}
             >
               <Text style={[styles.suggestionTitle, isDark && { color: '#E5E7EB' }]}>{item.title}</Text>
               <Text style={[styles.suggestionSubtitle, isDark && { color: '#9CA3AF' }]}>
@@ -51,15 +48,6 @@ export default function ExampleInputs({
           )}
         />
       </View>
-      <PromptInput
-        value={value}
-        onChangeText={setValue}
-        onSubmit={(t) => {
-          onSubmit(t);
-          setValue('');
-        }}
-        placeholder={placeholder}
-      />
     </View>
   );
 }

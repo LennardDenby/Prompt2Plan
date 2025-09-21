@@ -1,8 +1,9 @@
 import ExampleInputs from '@/components/ExampleInputs';
+import PromptInput from '@/components/PromptInput';
 import SignInOverlay from '@/components/SignInOverlay';
 import { useAuth } from '@/hooks/use-auth';
 import { colors } from '@/theme/colors';
-import React from 'react';
+import React, { useState } from 'react';
 import {
   ActivityIndicator,
   Button,
@@ -14,6 +15,8 @@ import {
 export default function HomeScreen() {
   const { user, isLoading, isGuest, signOutUser, continueAsGuest, signInUser } = useAuth();
 
+  const [userInput, setUserInput] = useState('');
+  
   const handleSubmit = (text: string) => {
     console.log('Submit prompt:', text);
   };
@@ -41,7 +44,17 @@ export default function HomeScreen() {
         {user && <Button onPress={signOutUser} title="Sign out" />}
         {isGuest && <Button onPress={signOutUser} title="Sign in" />}
       </View>
-      <ExampleInputs onSubmit={handleSubmit} />
+      <View>
+        <ExampleInputs setUserInput={setUserInput} />
+        <PromptInput
+                value={userInput}
+                onChangeText={setUserInput}
+                onSubmit={(t) => {
+                  handleSubmit(t);
+                  setUserInput('');
+                }}
+              />
+      </View>
     </View>
   );
 }             
@@ -53,6 +66,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   container: {
+    paddingBottom: 25,
     flex: 1,
     alignItems: 'center',
     justifyContent: 'space-between',

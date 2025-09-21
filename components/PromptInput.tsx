@@ -35,7 +35,6 @@ export default function PromptInput({
     const text = value.trim();
     if (!text) return;
     onSubmit?.(text);
-    // Clear only when uncontrolled; if controlled, ask parent to clear
     if (controlledValue === undefined) {
       setInternal('');
     } else {
@@ -134,7 +133,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     paddingHorizontal: 8,
-    paddingVertical: 8,
+    paddingVertical: 12,
     minHeight: 44,
     maxHeight: 140,
     lineHeight: 20,
