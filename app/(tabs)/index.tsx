@@ -3,10 +3,13 @@ import PromptInput from '@/components/PromptInput';
 import SignInOverlay from '@/components/SignInOverlay';
 import { useAuth } from '@/hooks/use-auth';
 import { colors } from '@/theme/colors';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Button,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
   StyleSheet,
   Text,
   View,
@@ -16,8 +19,24 @@ export default function HomeScreen() {
   const { user, isLoading, isGuest, signOutUser, continueAsGuest, signInUser } = useAuth();
 
   const [userInput, setUserInput] = useState('');
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
   
+  useEffect(() => {
+  const showSub = Platform.OS === 'ios'
+    ? Keyboard.addListener('keyboardWillShow', () => setKeyboardVisible(true))
+    : Keyboard.addListener('keyboardDidShow', () => setKeyboardVisible(true));
+  const hideSub = Platform.OS === 'ios'
+    ? Keyboard.addListener('keyboardWillHide', () => setKeyboardVisible(false))
+    : Keyboard.addListener('keyboardDidHide', () => setKeyboardVisible(false));
+  return () => {
+    showSub.remove();
+    hideSub.remove();
+  };
+}, []);
+
   const handleSubmit = (text: string) => {
+    setUserInput('');
+    Keyboard.dismiss();
     console.log('Submit prompt:', text);
   };
 
@@ -44,17 +63,22 @@ export default function HomeScreen() {
         {user && <Button onPress={signOutUser} title="Sign out" />}
         {isGuest && <Button onPress={signOutUser} title="Sign in" />}
       </View>
-      <View>
-        <ExampleInputs setUserInput={setUserInput} />
+      <KeyboardAvoidingView
+        style={styles.userInput}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      >
+        <ExampleInputs
+          setUserInput={setUserInput}
+          visible={!keyboardVisible}
+        />
         <PromptInput
-                value={userInput}
-                onChangeText={setUserInput}
-                onSubmit={(t) => {
-                  handleSubmit(t);
-                  setUserInput('');
-                }}
-              />
-      </View>
+          value={userInput}
+          onChangeText={setUserInput}
+          onSubmit={(t) => {
+            handleSubmit(t);
+          }}
+        />
+      </KeyboardAvoidingView>
     </View>
   );
 }             
@@ -66,7 +90,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   container: {
-    paddingBottom: 25,
     flex: 1,
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -79,4 +102,10 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
   },
+  userInput: {
+    position: 'absolute',
+    bottom: 25,
+    left: 0,
+    width: '100%'
+  }
 });

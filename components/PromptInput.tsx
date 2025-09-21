@@ -14,7 +14,6 @@ import {
 type Props = {
   placeholder?: string;
   onSubmit?: (text: string) => void;
-  // Added: optional controlled props
   value?: string;
   onChangeText?: (text: string) => void;
 };
@@ -62,10 +61,10 @@ export default function PromptInput({
             onChangeText={setValue}
             placeholder={placeholder}
             placeholderTextColor={'#9AA0A6'}
-            multiline
+            returnKeyType="send"
+            multiline={false}
             textAlignVertical="top"
             style={[styles.input, styles.inputLight]}
-            returnKeyType="send"
             onSubmitEditing={handleSend}
             accessibilityLabel="Event prompt input"
           />

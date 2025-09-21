@@ -1,11 +1,12 @@
 import PromptInput from '@/components/PromptInput';
-import React, { useState } from 'react';
-import { FlatList, Pressable, StyleSheet, Text, View, useColorScheme } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { FlatList, Keyboard, Pressable, StyleSheet, Text, View, useColorScheme } from 'react-native';
 
 type Suggestion = { title: string; subtitle: string };
 type Props = {
   setUserInput: (text: string) => void;
   suggestions?: Suggestion[];
+  visible: boolean;
 };
 
 const DEFAULT_SUGGESTIONS: Suggestion[] = [
@@ -17,12 +18,14 @@ const DEFAULT_SUGGESTIONS: Suggestion[] = [
 ];
 
 export default function ExampleInputs({
+  setUserInput,
   suggestions = DEFAULT_SUGGESTIONS,
-  setUserInput
+  visible
 }: Props) {
   const isDark = useColorScheme() === 'dark';
 
   return (
+    visible && (
     <View style={styles.container}>
       <View style={styles.suggestionsRow}>
         <FlatList
@@ -49,7 +52,7 @@ export default function ExampleInputs({
         />
       </View>
     </View>
-  );
+  ));
 }
 
 const styles = StyleSheet.create({
