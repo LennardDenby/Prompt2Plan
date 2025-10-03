@@ -1,6 +1,5 @@
-import PromptInput from '@/components/PromptInput';
-import React, { useEffect, useState } from 'react';
-import { FlatList, Keyboard, Pressable, StyleSheet, Text, View, useColorScheme } from 'react-native';
+import React from 'react';
+import { FlatList, Pressable, StyleSheet, Text, View, useColorScheme } from 'react-native';
 
 type Suggestion = { title: string; subtitle: string };
 type Props = {
@@ -10,11 +9,11 @@ type Props = {
 };
 
 const DEFAULT_SUGGESTIONS: Suggestion[] = [
-  { title: 'Todo', subtitle: 'Todo' },
-  { title: 'Todo', subtitle: 'Todo' },
-  { title: 'Todo', subtitle: 'Todo' },
-  { title: 'Todo', subtitle: 'Todo' },
-  { title: 'Todo', subtitle: 'Todo' },
+  { title: 'Quick Meeting', subtitle: 'Team standup tomorrow at 9am' },
+  { title: 'Lunch Plans', subtitle: 'Lunch with Sarah on Friday at 12:30pm' },
+  { title: 'Appointment', subtitle: 'Dentist appointment next Monday at 2pm' },
+  { title: 'Coffee Chat', subtitle: 'Coffee meeting at Starbucks on Thursday at 10am' },
+  { title: 'Weekly Check-in', subtitle: 'Project review meeting every Tuesday at 3pm' },
 ];
 
 export default function ExampleInputs({

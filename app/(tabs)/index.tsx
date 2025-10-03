@@ -1,30 +1,25 @@
-import CalendarEventModal, { CalendarEventFormValues } from '@/components/CalendarEventModal';
 import ExampleInputs from '@/components/ExampleInputs';
 import PromptInput from '@/components/PromptInput';
-import SignInOverlay from '@/components/SignInOverlay';
-import { useAuth } from '@/hooks/use-auth';
+import { useCalendar } from '@/hooks/use-calendar';
+import { useGemini } from '@/hooks/use-gemini';
 import { colors } from '@/theme/colors';
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
-  Button,
+  Alert,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
-  Text,
-  View,
+  View
 } from 'react-native';
 
 export default function HomeScreen() {
-  const { user, isLoading, isGuest, signOutUser, continueAsGuest, signInUser } = useAuth();
-
   const [userInput, setUserInput] = useState('');
   const [keyboardVisible, setKeyboardVisible] = useState(false);
-  const [showEventModal, setShowEventModal] = useState(false);
-  const [draftEventTitle, setDraftEventTitle] = useState<string | undefined>(undefined);
-  const [lastSavedEvent, setLastSavedEvent] = useState<CalendarEventFormValues | null>(null);
-  
+  const { extractEventDetails, isLoading: isGeminiLoading } = useGemini();
+  const { createEvent } = useCalendar();
+
   useEffect(() => {
   const showSub = Platform.OS === 'ios'
     ? Keyboard.addListener('keyboardWillShow', () => setKeyboardVisible(true))
@@ -38,38 +33,34 @@ export default function HomeScreen() {
   };
 }, []);
 
-  const handleSubmit = (text: string) => {
+  const handleSubmit = async (text: string) => {
+    if (!text.trim()) return;
+
     setUserInput('');
     Keyboard.dismiss();
-    console.log('Submit prompt:', text);
-    // Show the calendar event modal with the prompt as default title
-    setDraftEventTitle(text);
-    setShowEventModal(true);
-  };
 
-  if (isLoading) {
-    return (
-      <View style={styles.loader}>
-        <ActivityIndicator size="large" color={colors.primary} />
-      </View>
-    );
+    try {
+      const eventDetails = await extractEventDetails(text);
+
+      if (!eventDetails) {
+        Alert.alert('Error', 'Could not understand the event details. Please try again.');
+        return;
+      }
+
+      await createEvent(eventDetails);
+    } catch (error) {
+      Alert.alert('Error', 'An error occurred while creating the event.');
+    }
   }
 
   return (
     <View style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.text}>
-          Hello{user ? ' ' + user.user.givenName : isGuest ? ' Guest' : ''}!
-        </Text>
-        <SignInOverlay
-          visible={!user && !isGuest}
-          onContinueAsGuest={continueAsGuest}
-          onSignIn={signInUser}
-          isLoading={isLoading}
-        />
-        {user && <Button onPress={signOutUser} title="Sign out" />}
-        {isGuest && <Button onPress={signOutUser} title="Sign in" />}
-      </View>
+      {isGeminiLoading && (
+        <View style={styles.loadingOverlay}>
+          <ActivityIndicator size="large" color={colors.primary} />
+        </View>
+      )}
+      
       <KeyboardAvoidingView
         style={styles.userInput}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -86,16 +77,6 @@ export default function HomeScreen() {
           }}
         />
       </KeyboardAvoidingView>
-      <CalendarEventModal
-        visible={showEventModal}
-        defaultTitle={draftEventTitle}
-        calendarAccountEmail={user?.user.email}
-        onClose={() => setShowEventModal(false)}
-        onSave={(values) => {
-          setLastSavedEvent(values);
-          console.log('Saved event:', values);
-        }}
-      />
     </View>
   );
 }             
@@ -124,5 +105,11 @@ const styles = StyleSheet.create({
     bottom: 25,
     left: 0,
     width: '100%'
+  },
+  loadingOverlay: {
+    position: 'absolute',
+    top: -300,
+    bottom: 0,
+    justifyContent: 'center',
   }
 });
