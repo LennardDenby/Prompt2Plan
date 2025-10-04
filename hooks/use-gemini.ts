@@ -11,6 +11,8 @@ export type EventDetails = {
   endDate: string;
   notes?: string;
   location?: string;
+  url?: string;
+  allDay?: boolean;
 };
 
 export function useGemini() {
@@ -36,6 +38,8 @@ export function useGemini() {
         - endDate: ISO 8601 format date-time string in timezone ${LOCAL_TIME_ZONE} (default 1 hour after start)
         - notes: Any additional notes or description (optional)
         - location: Event location if mentioned (optional)
+        - url: Event URL if mentioned (optional)
+        - allDay: true if it's an all-day event, otherwise false (default false), all-day events should have startDate and endDate at the same time
 
         Current date and time in user's timezone (${LOCAL_TIME_ZONE}): ${localDateTimeString}
         IMPORTANT: All dates must be in the user's timezone: ${LOCAL_TIME_ZONE}

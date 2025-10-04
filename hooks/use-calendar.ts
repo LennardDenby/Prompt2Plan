@@ -4,10 +4,10 @@ import { EventDetails } from './use-gemini';
 import { check, request, RESULTS, openSettings, PERMISSIONS } from 'react-native-permissions';
 
 export function useCalendar() {
-    const iosCalendarPermission = PERMISSIONS.IOS.CALENDARS;
+  const iosCalendarPermission = PERMISSIONS.IOS.CALENDARS;
 
   async function ensurePermission(): Promise<boolean> {
-    if (Platform.OS !== 'ios') return true; // Android handled internally by intent
+    if (Platform.OS !== 'ios') return true;
     const status = await check(iosCalendarPermission);
     if (status === RESULTS.GRANTED) return true;
     if (status === RESULTS.BLOCKED) {
@@ -34,6 +34,8 @@ export function useCalendar() {
         endDate: eventDetails.endDate,
         notes: eventDetails.notes || undefined,
         location: eventDetails.location || undefined,
+        url: eventDetails.url || undefined,
+        allDay: eventDetails.allDay || false,
       };
       
       console.log('Event Config:', eventConfig);
