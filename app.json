@@ -10,7 +10,11 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.lennarddenby.Prompt2Plan"
+      "bundleIdentifier": "com.lennarddenby.Prompt2Plan",
+      "infoPlist": {
+        "NSCalendarsWriteOnlyAccessUsageDescription": "Create events in your calendar",
+        "NSCalendarsUsageDescription": "We need calendar access to add your planned events."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -29,9 +33,11 @@
     },
     "plugins": [
       [
-        "@react-native-google-signin/google-signin",
+        "react-native-permissions",
         {
-          "iosUrlScheme": "com.googleusercontent.apps.914386916447-r41dspgnll5n25ppvcnv9757poegpdu1"
+          "iosPermissions": [
+            "Calendars"
+          ]
         }
       ],
       "expo-router",
