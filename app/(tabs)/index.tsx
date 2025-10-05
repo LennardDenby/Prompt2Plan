@@ -1,5 +1,6 @@
 import ExampleInputs from '@/components/ExampleInputs';
 import PromptInput from '@/components/PromptInput';
+import Tutorial from '@/components/Tutorial';
 import { useCalendar } from '@/hooks/use-calendar';
 import { useFadeAnimation } from '@/hooks/use-fade-animation';
 import { useGemini } from '@/hooks/use-gemini';
@@ -63,13 +64,14 @@ export default function HomeScreen() {
           <ActivityIndicator size="large" color={colors.primary} />
         </View>
       )}
+      <Tutorial/>
       <KeyboardAvoidingView
         style={styles.userInput}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
         <Animated.View
           style={animatedStyle}
-          pointerEvents={!userInput ? 'auto' : 'none'}
+          pointerEvents="box-none"
         >
           <ExampleInputs
             setUserInput={setUserInput}
@@ -89,11 +91,6 @@ export default function HomeScreen() {
 }             
 
 const styles = StyleSheet.create({
-  loader: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   container: {
     flex: 1,
     alignItems: 'center',
@@ -115,7 +112,7 @@ const styles = StyleSheet.create({
   },
   loadingOverlay: {
     position: 'absolute',
-    top: -300,
+    top: -150,
     bottom: 0,
     justifyContent: 'center',
   }

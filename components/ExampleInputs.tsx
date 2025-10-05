@@ -30,6 +30,7 @@ export default function ExampleInputs({
           data={suggestions}
           keyExtractor={(item, i) => item.title + i}
           horizontal
+          keyboardShouldPersistTaps="handled"
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.suggestionsContent}
           renderItem={({ item }) => (
