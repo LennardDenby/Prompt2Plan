@@ -1,6 +1,7 @@
 import ExampleInputs from '@/components/ExampleInputs';
 import PromptInput from '@/components/PromptInput';
 import { useCalendar } from '@/hooks/use-calendar';
+import { useFadeAnimation } from '@/hooks/use-fade-animation';
 import { useGemini } from '@/hooks/use-gemini';
 import { colors } from '@/theme/colors';
 import React, { useEffect, useState } from 'react';
@@ -13,12 +14,14 @@ import {
   StyleSheet,
   View
 } from 'react-native';
+import Animated from 'react-native-reanimated';
 
 export default function HomeScreen() {
   const [userInput, setUserInput] = useState('');
   const [keyboardVisible, setKeyboardVisible] = useState(false);
   const { extractEventDetails, isLoading: isGeminiLoading } = useGemini();
   const { createEvent } = useCalendar();
+  const animatedStyle = useFadeAnimation(!userInput);
 
   useEffect(() => {
   const showSub = Platform.OS === 'ios'
@@ -60,15 +63,19 @@ export default function HomeScreen() {
           <ActivityIndicator size="large" color={colors.primary} />
         </View>
       )}
-      
       <KeyboardAvoidingView
         style={styles.userInput}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
-        <ExampleInputs
-          setUserInput={setUserInput}
-          visible={!keyboardVisible}
-        />
+        <Animated.View
+          style={animatedStyle}
+          pointerEvents={!userInput ? 'auto' : 'none'}
+        >
+          <ExampleInputs
+            setUserInput={setUserInput}
+            visible={true}
+          />
+        </Animated.View>
         <PromptInput
           value={userInput}
           onChangeText={setUserInput}

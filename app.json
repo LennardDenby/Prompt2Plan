@@ -12,8 +12,9 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.lennarddenby.Prompt2Plan",
       "infoPlist": {
-        "NSCalendarsWriteOnlyAccessUsageDescription": "Create events in your calendar",
-        "NSCalendarsUsageDescription": "We need calendar access to add your planned events."
+        "NSCalendarsWriteOnlyAccessUsageDescription": "We need calendar access to add your planned events.",
+        "NSCalendarsUsageDescription": "We need calendar access to add your planned events.",
+        "NSCalendarsFullAccessUsageDescription": "We need calendar access to add your planned events."
       }
     },
     "android": {

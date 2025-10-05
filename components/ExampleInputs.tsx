@@ -9,11 +9,10 @@ type Props = {
 };
 
 const DEFAULT_SUGGESTIONS: Suggestion[] = [
-  { title: 'Weekly Check-in', subtitle: 'Project review meeting every Tuesday at 3pm' },
-  { title: 'Quick Meeting', subtitle: 'Team standup tomorrow at 9am' },
-  { title: 'Lunch Plans', subtitle: 'Lunch with Sarah on Friday at 12:30pm' },
-  { title: 'Appointment', subtitle: 'Dentist appointment next Monday at 2pm' },
-  { title: 'Coffee Chat', subtitle: 'Coffee meeting at Starbucks on Thursday at 10am' },
+  { title: 'Quick', subtitle: 'Team standup tomorrow at 9am' },
+  { title: 'All day', subtitle: 'Moms birthday on Saturday' },
+  { title: 'With Location', subtitle: 'Coffee meeting at Starbucks on Thursday at 10am' },
+  { title: 'With URL', subtitle: 'Event at https://example.com' },
 ];
 
 export default function ExampleInputs({

@@ -7,7 +7,6 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
-    useColorScheme,
     View,
 } from 'react-native';
 
@@ -97,7 +96,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 8,
     width: '100%',
-    // Shadow (iOS) / Elevation (Android)
     shadowColor: '#000',
     shadowOpacity: 0.12,
     shadowRadius: 8,
