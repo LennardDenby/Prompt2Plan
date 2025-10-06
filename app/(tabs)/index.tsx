@@ -5,6 +5,7 @@ import { useCalendar } from '@/hooks/use-calendar';
 import { useFadeAnimation } from '@/hooks/use-fade-animation';
 import { useGemini } from '@/hooks/use-gemini';
 import { colors } from '@/theme/colors';
+import { useShareIntent } from "expo-share-intent";
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
@@ -18,7 +19,9 @@ import {
 import Animated from 'react-native-reanimated';
 
 export default function HomeScreen() {
-  const [userInput, setUserInput] = useState('');
+  const { shareIntent } = useShareIntent();
+
+  const [userInput, setUserInput] = useState(shareIntent.text ?? '');
   const [keyboardVisible, setKeyboardVisible] = useState(false);
   const { extractEventDetails, isLoading: isGeminiLoading } = useGemini();
   const { createEvent } = useCalendar();

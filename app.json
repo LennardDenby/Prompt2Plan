@@ -42,6 +42,7 @@
         }
       ],
       "expo-router",
+      "expo-share-intent",
       [
         "expo-splash-screen",
         {
