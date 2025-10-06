@@ -19,7 +19,7 @@ import {
 import Animated from 'react-native-reanimated';
 
 export default function HomeScreen() {
-  const { shareIntent } = useShareIntent();
+  const { hasShareIntent, shareIntent, resetShareIntent, error } = useShareIntent();
 
   const [userInput, setUserInput] = useState(shareIntent.text ?? '');
   const [keyboardVisible, setKeyboardVisible] = useState(false);
@@ -27,6 +27,12 @@ export default function HomeScreen() {
   const { createEvent } = useCalendar();
   const animatedStyle = useFadeAnimation(!userInput);
 
+  useEffect(() => {
+    if (hasShareIntent && shareIntent?.text) {
+      handleSubmit(shareIntent.text);
+      resetShareIntent();
+    }
+  }, [hasShareIntent, shareIntent]);
   useEffect(() => {
   const showSub = Platform.OS === 'ios'
     ? Keyboard.addListener('keyboardWillShow', () => setKeyboardVisible(true))

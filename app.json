@@ -42,7 +42,15 @@
         }
       ],
       "expo-router",
-      "expo-share-intent",
+      [
+        "expo-share-intent",
+        {
+          "iosActivationRules": {
+            "NSExtensionActivationSupportsText": true
+          },
+          "androidIntentFilters": ["text/plain"]
+        }
+      ],
       [
         "expo-splash-screen",
         {
