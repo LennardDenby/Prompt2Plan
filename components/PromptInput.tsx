@@ -61,7 +61,7 @@ export default function PromptInput({
             placeholder={placeholder}
             placeholderTextColor={'#9AA0A6'}
             returnKeyType="send"
-            multiline={false}
+            multiline={true}
             textAlignVertical="top"
             style={[styles.input, styles.inputLight]}
             onSubmitEditing={handleSend}
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
   },
   card: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-end',
     borderRadius: 22,
     paddingHorizontal: 10,
     paddingVertical: 8,
@@ -107,11 +107,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#EBEDF0',
   },
-  cardDark: {
-    backgroundColor: '#1F1F23',
-    borderWidth: 1,
-    borderColor: '#2A2A2F',
-  },
   iconBtn: {
     width: 36,
     height: 36,
@@ -120,6 +115,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#F3F4F6',
     marginRight: 6,
+    marginBottom: 3,
   },
   iconText: {
     fontSize: 18,
@@ -138,9 +134,6 @@ const styles = StyleSheet.create({
   inputLight: {
     color: '#11181C',
   },
-  inputDark: {
-    color: '#ECEDEE',
-  },
   smallBtn: {
     width: 36,
     height: 36,
@@ -158,6 +151,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom: 2,
   },
   sendBtnDisabled: {
     opacity: 0.4,
