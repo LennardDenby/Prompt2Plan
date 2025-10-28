@@ -1,49 +1,52 @@
-![Logo](assets/images/logo.png)
 # Prompt2Plan
 
-Minimal app that turns an AI prompt into a calendar event.
-
-## What it does
-- Convert a natural-language prompt into a calendar event (title, date/time, etc.).
-- Uses **Google Gemini AI** to intelligently parse natural language and extract event details
-- Sign in with Google to sync with your Google Calendar.
-- Continue as guest for a distraction-free flow.
-
-## Tech
-- React Native + Expo Router
-- TypeScript
-- Google Gemini AI (@google/generative-ai)
-- @react-native-google-signin/google-signin
-- react-native-add-calendar-event
+A small Expo React Native app that converts natural-language prompts into calendar events.
 
 ## Quick start
-1. Install dependencies:
-   - npm: `npm install`
-   - yarn: `yarn`
-   - pnpm: `pnpm install`
-2. **Set up Gemini API** (see [GEMINI_SETUP.md](GEMINI_SETUP.md) for detailed instructions):
-   - Get your free API key from [Google AI Studio](https://aistudio.google.com/app/apikey)
-   - Create `.env` file: `cp .env.example .env`
-   - Add your key: `EXPO_PUBLIC_GEMINI_API_KEY=your_key_here`
-3. Create a Google Cloud project and OAuth client IDs (Web and iOS).
-4. Add the following env vars to `.env`:
 
-````dotenv
-EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID=your_web_client_id.apps.googleusercontent.com
-EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID=your_ios_client_id.apps.googleusercontent.com
-EXPO_PUBLIC_GEMINI_API_KEY=your_gemini_api_key_here
-````
+1. Install dependencies
 
-5. Run the app:
-   - npx expo run:ios
+```bash
+npm install
+```
 
-## Example Prompts
-- "Team standup tomorrow at 9am"
-- "Lunch with Sarah on Friday at 12:30pm"
-- "Dentist appointment next Monday at 2pm"
-- "Coffee meeting at Starbucks on Thursday at 10am"
+2. Start the dev tools (Expo)
+
+```bash
+npm run start
+```
+
+3. Native builds (required for Share Intent and extension testing)
+
+```bash
+# macOS iOS
+npx expo prebuild --clean
+npx expo run:ios
+```
+
+Note: Share-to-app (share extension / intent) does NOT work in Expo Go; you must run a native build.
+
+## Share intent (share-to-app)
+
+- The project uses `expo-share-intent` configured in `app.json`.
+- Wrap your root layout with `ShareIntentProvider` (see `app/_layout.tsx`).
+- Catch unmatched deep links with a catch-all route file named `[...missing].tsx` that redirects to `/`.
+
+If shared text isn't being received, ensure you:
+
+1. Added the plugin config in `app.json` (see `expo-share-intent` section).
+2. Ran `npx expo prebuild --clean` and rebuilt the app natively.
+3. Test sharing from another app (Safari / Notes) — select text → Share → Prompt2Plan.
+
+## Where to look
+
+- `app/_layout.tsx` — root layout and `ShareIntentProvider` wrapper.
+- `app/index.tsx` — home screen; consumes `useShareIntent()` and processes shared text.
+- `components/PromptInput.tsx` — input UI used to type or paste prompts.
+- `hooks/use-gemini.ts` — extracts event JSON from natural language using Google GenAI.
+- `hooks/use-calendar.ts` — creates calendar events using `react-native-add-calendar-event`.
 
 ## Notes
-- ✅ AI parsing using Google Gemini
-- ✅ Native calendar integration
-- Gemini API free tier: 60 requests/minute
+
+- Keep the `scheme` value in `app.json` (currently `prompt2plan`) in sync with iOS native config if you modify it.
+- The app expects a native build for any OS-level integrations (share extension, calendar creation).
